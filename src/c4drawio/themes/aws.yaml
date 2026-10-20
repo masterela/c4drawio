@@ -1,0 +1,26 @@
+# AWS architecture look: white boxes, light lanes, official AWS group shapes, titles at the top.
+name: aws
+extends: c4
+description: AWS architecture diagrams (AWS Architecture Icons look, light lanes, top titles).
+
+spacing:
+  gap: 50
+  padding: 20
+
+elements:
+  default: {fill: "#FFFFFF", stroke: "#9AA9BB", font_color: "#232F3E", rounded: 6}
+  person: {fill: "#232F3E", stroke: "#232F3E", font_color: "#FFFFFF", size: [160, 150]}
+  system: {fill: "#EEF4FF", stroke: "#1A73E8"}
+  database: {fill: "#E6EAF0", stroke: "#7D8998"}
+  queue: {fill: "#FCE4F0", stroke: "#E7157B"}
+  component: {fill: "#F7F9FC", stroke: "#B9C4D0"}
+  external: {fill: "#F2F3F3", stroke: "#AAB7B8", font_color: "#5A6C86"}
+
+boundaries:
+  default: {title_position: top, dashed: false, stroke: "#9AA9BB", font_color: "#232F3E"}
+  enterprise: {dashed: true, stroke: "#7D8998"}
+  system_boundary: {dashed: true, stroke: "#1A73E8", font_color: "#1A73E8"}
+  container_boundary: {dashed: true, stroke: "#5A6C86"}
+
+relationships:
+  default: {color: "#545B64", font_color: "#232F3E"}

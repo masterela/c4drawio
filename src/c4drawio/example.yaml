@@ -1,0 +1,100 @@
+# c4drawio example: an AWS target architecture with lanes, AWS groups, icons, badges and styled relationships.
+# Render:  c4drawio render example.yaml        (-> example.drawio)
+theme: aws
+
+pages:
+  - name: Target architecture
+    title: Maintenance planning platform — target architecture
+    subtitle: Lanes group the services; badges show what is new (NEW) or extended (EXT).
+    layout: row
+    align: start
+    elements:
+      - id: onprem
+        kind: onprem
+        name: On-premise
+        layout: column
+        gap: 30
+        children:
+          - {id: inputs, kind: icon, icon: traditional_server, name: Daily inputs, description: "NetCDF, ~2 GB/day"}
+          - {id: pmht, kind: database, name: PMHT SQL, technology: SQL Server, description: 8 years of plans}
+          - {id: ace, kind: database_ext, name: ACE MySQL, technology: MySQL, description: read-only}
+
+      - id: cloud
+        kind: aws_cloud
+        name: AWS Cloud — landing zone
+        layout: column
+        children:
+          - id: vpc
+            kind: vpc
+            name: VPC — private subnets
+            layout: column
+            gap: 30
+            children:
+              - id: ingest
+                kind: lane
+                name: "① Ingestion"
+                justify: space-between
+                children:
+                  - {id: sgw, kind: icon, icon: storage_gateway, name: Storage Gateway}
+                  - {id: landing, kind: icon, icon: s3, name: S3, description: landing bucket}
+                  - {id: sfn, kind: icon, icon: step_functions, name: Step Functions, description: validate · archive, badge: EXT}
+                  - {id: dms, kind: icon, icon: database_migration_service, name: AWS DMS, description: change capture, badge: NEW}
+              - id: ml
+                kind: lane
+                name: "② Data & ML platform"
+                justify: space-between
+                children:
+                  - {id: lake, kind: icon, icon: s3, name: Data lake, description: raw → curated, badge: NEW}
+                  - {id: train, kind: icon, icon: sagemaker, name: SageMaker Pipelines, description: training jobs, badge: NEW}
+                  - {id: registry, kind: icon, icon: sagemaker_model, name: Model Registry, badge: NEW}
+                  - {id: monitor, kind: icon, icon: cloudwatch_2, name: Model Monitor, badge: NEW}
+              - id: serving
+                kind: lane
+                name: "③ Serving"
+                justify: space-between
+                children:
+                  - {id: apigw, kind: icon, icon: api_gateway, name: API Gateway, description: private}
+                  - {id: evalapi, kind: icon, icon: fargate, technology: ECS Fargate, name: Evaluation API, badge: EXT}
+                  - {id: optim, kind: icon, icon: fargate, technology: ECS Fargate, name: Optimization service, badge: NEW}
+                  - {id: explain, kind: icon, icon: bedrock, name: Bedrock, description: French summaries, badge: NEW}
+              - id: apps
+                kind: lane
+                name: "④ Applications"
+                justify: space-between
+                children:
+                  - {id: acelambda, kind: icon, icon: lambda, name: ACE automation}
+                  - {id: aurora, kind: icon, icon: aurora, name: Aurora PostgreSQL, description: plans · constraints}
+                  - {id: webapp, kind: icon, icon: fargate, technology: ECS Fargate, name: Planning web app}
+                  - {id: alb, kind: icon, icon: elastic_load_balancing, name: ALB, description: HTTPS}
+
+      - id: users
+        kind: group
+        name: Users
+        layout: column
+        gap: 40
+        children:
+          - {id: planners, kind: person, name: Planners, description: "~15 planners and coordinators"}
+          - {id: hydro, kind: person, name: Hydrologists, description: "~10 Water Resources"}
+
+    relationships:
+      - {from: inputs, to: sgw, label: daily sync}
+      - {from: sgw, to: landing}
+      - {from: landing, to: sfn}
+      - {from: pmht, to: dms, label: read-only CDC, style: data}
+      - {from: ace, to: dms, style: data+dotted}
+      - {from: dms, to: lake, label: governed data, style: data}
+      - {from: sfn, to: train, label: training jobs}
+      - {from: lake, to: train}
+      - {from: train, to: registry}
+      - {from: registry, to: monitor, style: dependency}
+      - {from: registry, to: evalapi, label: approved model, style: control}
+      - {from: apigw, to: evalapi}
+      - {from: optim, to: evalapi, label: price candidates}
+      - {from: optim, to: explain}
+      - {from: webapp, to: optim, label: request options, style: control}
+      - {from: webapp, to: aurora, bidirectional: true}
+      - {from: aurora, to: acelambda, style: async}
+      - {from: acelambda, to: ace, label: write-back (approved), style: error+async}
+      - {from: alb, to: webapp}
+      - {from: planners, to: alb, label: HTTPS + SSO, style: control}
+      - {from: hydro, to: apigw, label: private API}

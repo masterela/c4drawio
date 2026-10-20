@@ -1,0 +1,42 @@
+# Classic C4 container diagram (theme c4): people, systems, containers, databases, a queue, boundaries.
+theme: c4
+title: Internet Banking System — Containers
+subtitle: C4 level 2. External systems in grey.
+layout: row
+align: center
+elements:
+  - id: customer
+    kind: person
+    name: Personal Banking Customer
+    description: A customer of the bank, with personal bank accounts.
+  - id: ibs
+    kind: system_boundary
+    name: Internet Banking System
+    technology: Software System
+    layout: grid
+    columns: 2
+    gap: 60
+    children:
+      - {id: web, kind: container, name: Web Application, technology: Java and Spring MVC, description: Delivers the static content and the single page application.}
+      - {id: spa, kind: container, name: Single-Page Application, technology: JavaScript and Angular, description: Provides all of the Internet banking functionality to customers via their web browser.}
+      - {id: api, kind: container, name: API Application, technology: Java and Spring MVC, description: Provides Internet banking functionality via a JSON/HTTPS API.}
+      - {id: db, kind: database, name: Database, technology: Oracle Database Schema, description: "Stores user registration information, hashed credentials, access logs."}
+      - {id: events, kind: queue, name: Event bus, technology: Kafka, description: Domain events.}
+  - id: externals
+    kind: group
+    name: External systems
+    layout: column
+    gap: 60
+    children:
+      - {id: mainframe, kind: system_ext, name: Mainframe Banking System, description: "Stores all of the core banking information about customers, accounts, transactions."}
+      - {id: email, kind: system_ext, name: E-mail System, description: The internal Microsoft Exchange e-mail system.}
+relationships:
+  - {from: customer, to: web, label: Visits bigbank.com/ib using, technology: HTTPS}
+  - {from: customer, to: spa, label: Views account balances and makes payments using}
+  - {from: web, to: spa, label: Delivers to the customer's web browser}
+  - {from: spa, to: api, label: Makes API calls to, technology: JSON/HTTPS}
+  - {from: api, to: db, label: Reads from and writes to, technology: JDBC}
+  - {from: api, to: events, label: Publishes, style: async}
+  - {from: api, to: mainframe, label: Makes API calls to, technology: XML/HTTPS}
+  - {from: api, to: email, label: Sends e-mail using, style: async}
+  - {from: email, to: customer, label: Sends e-mails to, style: dependency}

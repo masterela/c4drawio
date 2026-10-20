@@ -1,0 +1,122 @@
+# Classic C4 model theme (Simon Brown's palette). Base theme: every other built-in theme extends it.
+# Copy with `c4drawio themes init c4 my-theme.yaml`, then change what you need (or use `extends: c4`).
+name: c4
+description: Classic C4 colours, dashed boundaries with the title at the bottom-left.
+
+font:
+  family: Helvetica
+  size: 11
+
+title:                       # page title / subtitle
+  position: top-left         # top-left | top-center | none
+  size: 20
+  subtitle_size: 12
+  color: "#232F3E"
+  subtitle_color: "#5A6C86"
+
+spacing:
+  page_margin: 20            # around the whole diagram
+  gap: 40                    # between siblings (override per container with `gap:`)
+  padding: 24                # inside containers
+  title_band: 28             # height reserved for a container title
+  route_margin: 12           # clearance kept between lines and shapes
+
+routing:
+  bend_penalty: 40           # cost of one bend, in px of extra length
+  crossing_penalty: 70       # cost of crossing a container border
+  overlap_penalty: 45        # cost of running on top of an unrelated line
+  rounded: true
+  jump: false                # draw "line jumps" where lines cross
+  label_max_width: 160       # relationship labels wrap at this width
+
+palette:                     # names usable anywhere a colour is expected
+  ink: "#232F3E"
+  muted: "#5A6C86"
+  blue: "#1A73E8"
+  teal: "#01A88D"
+  green: "#2E7D32"
+  orange: "#ED7100"
+  amber: "#E8A317"
+  red: "#DD344C"
+  purple: "#8C4FFF"
+  pink: "#E7157B"
+  grey: "#879196"
+
+elements:
+  default:                   # applied to every leaf kind, then the kind section on top
+    fill: "#438DD5"
+    stroke: "#3C7FC0"
+    font_color: "#FFFFFF"
+    font_size: 11
+    name_size: 13
+    rounded: 8
+    size: [200, 100]         # minimum size; height grows with the text
+    shadow: false
+  person: {fill: "#08427B", stroke: "#073B6F", size: [200, 180]}
+  system: {fill: "#1168BD", stroke: "#0B4884", size: [220, 110]}
+  container: {}
+  database: {size: [180, 110]}
+  queue: {size: [200, 90]}
+  component: {fill: "#85BBF0", stroke: "#78A8D8", font_color: "#000000"}
+  external: {fill: "#999999", stroke: "#8A8A8A", font_color: "#FFFFFF"}   # every *_ext kind
+  icon:
+    size: 48
+    font_size: 10
+    font_color: "#232F3E"
+  note: {fill: "#FFF8E1", stroke: "#E8A317", font_color: "#232F3E", rounded: 6, size: [220, 60], align: left}
+  text: {fill: none, stroke: none, font_color: "#232F3E", size: [220, 30], align: left}
+  raw: {}
+
+boundaries:
+  default:
+    fill: none
+    stroke: "#666666"
+    dashed: true
+    dash_pattern: "8 4"
+    font_color: "#333333"
+    font_size: 12
+    bold: true
+    rounded: 12
+    title_position: bottom   # top | bottom
+  enterprise: {}
+  system_boundary: {}
+  container_boundary: {}
+  group: {dashed: false, stroke: "#9AA9BB", title_position: top}
+  lane: {fill: "#F7F9FC", stroke: "#D5DBE3", dashed: false, font_color: "#5A6C86", font_size: 11, rounded: 6, title_position: top}
+  # AWS groups (official draw.io AWS group shapes)
+  aws_cloud: {aws_group: group_aws_cloud_alt, stroke: "#232F3E", font_color: "#232F3E", dashed: false, title_position: top}
+  account: {aws_group: group_aws_cloud, stroke: "#E7157B", font_color: "#E7157B", dashed: false, title_position: top}
+  region: {aws_group: group_region, stroke: "#00A4A6", font_color: "#147EBA", dashed: true, dash_pattern: "4 4", title_position: top}
+  az: {stroke: "#147EBA", font_color: "#147EBA", dashed: true, dash_pattern: "8 4", fill: none, rounded: 0, title_position: top}
+  vpc: {aws_group: group_vpc, stroke: "#8C4FFF", font_color: "#8C4FFF", dashed: false, title_position: top}
+  subnet_private: {aws_group: group_security_group, stroke: "#00A4A6", fill: "#E6F6F7", font_color: "#147EBA", dashed: false, title_position: top}
+  subnet_public: {aws_group: group_security_group, stroke: "#7AA116", fill: "#F2F6E8", font_color: "#248814", dashed: false, title_position: top}
+  security_group: {stroke: "#DD344C", font_color: "#DD344C", dashed: false, fill: none, rounded: 0, title_position: top}
+  onprem: {aws_group: group_corporate_data_center, stroke: "#7D8998", font_color: "#5A6C86", dashed: false, title_position: top}
+
+relationships:
+  default:
+    color: "#707070"
+    width: 1.5
+    dashed: false
+    dash_pattern: "6 4"
+    end_arrow: block         # block | classic | open | none | ...
+    start_arrow: none
+    font_size: 10
+    font_color: "#333333"
+  sync: {}
+  async: {dashed: true}
+  dotted: {dashed: true, dash_pattern: "1 3"}
+  thick: {width: 2.5}
+  thin: {width: 1}
+  data: {color: "#01A88D"}
+  control: {color: "#1A73E8", width: 2}
+  error: {color: "#DD344C"}
+  warning: {color: "#E8A317"}
+  dependency: {dashed: true, color: "#879196", width: 1}
+
+badges:
+  default: {fill: "#5A6C86", font_color: "#FFFFFF"}
+  NEW: {fill: "#1A73E8"}
+  EXT: {fill: "#E8A317"}
+  TBC: {fill: "#879196"}

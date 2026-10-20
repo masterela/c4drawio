@@ -1,0 +1,29 @@
+# Greyscale theme for print and documents.
+name: mono
+extends: c4
+description: Greyscale, print-friendly.
+
+title: {color: "#000000", subtitle_color: "#555555"}
+
+elements:
+  default: {fill: "#FFFFFF", stroke: "#333333", font_color: "#000000"}
+  person: {fill: "#E0E0E0", stroke: "#333333"}
+  system: {fill: "#F2F2F2"}
+  component: {fill: "#FAFAFA", stroke: "#777777"}
+  external: {fill: "#FFFFFF", stroke: "#999999", font_color: "#555555"}
+  note: {fill: "#FFFFFF", stroke: "#999999", font_color: "#333333"}
+
+boundaries:
+  default: {stroke: "#555555", font_color: "#000000"}
+  lane: {fill: "#F5F5F5", stroke: "#CCCCCC", font_color: "#333333"}
+
+relationships:
+  default: {color: "#333333", font_color: "#000000"}
+  data: {color: "#333333"}
+  control: {color: "#000000"}
+  error: {color: "#333333", dashed: true}
+
+badges:
+  default: {fill: "#555555"}
+  NEW: {fill: "#000000"}
+  EXT: {fill: "#777777"}
